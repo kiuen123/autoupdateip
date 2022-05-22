@@ -48,8 +48,8 @@ async function main() {
         const results = await Promise.all(
             cfDnsIdRes.data.result.map(async (cfDnsRecord) => {
                 IP = cfDnsRecord.content;
-                console.log(`Current IP : ${IP}`);
-                console.log(`New IP     : ${NewIP}`);
+                console.log("\nCurrent IP :" + IP);
+                console.log("New IP     :" + NewIP);
                 let content;
                 switch (cfDnsRecord.type) {
                     case "A":
@@ -75,21 +75,29 @@ async function main() {
                 return axios.put(cfPutReqUrl, cfPutReqData, { headers: cfAuthHeaders });
             })
         );
-        results.forEach((result) => {
-            if (!result || !result.data) {
-                console.error("Warning: null result received, see above for error messages");
-                return;
-            }
-            if (result.data.success === true) {
-                console.log("\nDNS Record update success at :" + getDateTime());
-            } else {
-                console.error("\nDNS Record update failed :\n", JSON.stringify(result.data.errors, undefined, 2));
-            }
-        });
+        await Promise.resolve(
+            results.forEach((result) => {
+                if (!result || !result.data) {
+                    console.error("Warning: null result received, see above for error messages");
+                    return;
+                }
+                if (result.data.success === true) {
+                    console.log("\nDNS Record update success at :" + getDateTime());
+                } else {
+                    console.error("\nDNS Record update failed :\n", JSON.stringify(result.data.errors, undefined, 2));
+                }
+            })
+        );
     } catch (err) {
         console.log(err);
     }
 }
+
+console.clear();
+(async () => {
+    NewIP = await publicIp.v4();
+})();
+main();
 
 var i = 0; // dots counter
 //update ip every 1s
@@ -107,7 +115,7 @@ setInterval(async () => {
         //check if ip changed
         if (IP !== NewIP) {
             //update ip
-            main();
+            await Promise.resolve(main());
         } else {
             //do nothing
             process.stdout.clearLine();
