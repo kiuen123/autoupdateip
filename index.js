@@ -2,7 +2,7 @@ import publicIp from "public-ip";
 import axios from "axios";
 import config from "./config.json" assert { type: "json" };
 
-//lấy ngày giờ
+//get date-time
 const getDateTime = () => {
     let today = new Date();
     let date = today.getDate() + "-" + (today.getMonth() + 1) + "-" + today.getFullYear();
@@ -10,7 +10,7 @@ const getDateTime = () => {
     let DateTime = date + " " + time;
     return DateTime;
 };
-//khởi tạo IP
+
 let IP = null;
 let NewIP = null;
 
@@ -47,8 +47,9 @@ async function main() {
 
         const results = await Promise.all(
             cfDnsIdRes.data.result.map(async (cfDnsRecord) => {
-                console.log("DNS Record ID: ", cfDnsRecord.id);
                 IP = cfDnsRecord.content;
+                console.log(`Current IP : ${IP}`);
+                console.log(`New IP     : ${NewIP}`);
                 let content;
                 switch (cfDnsRecord.type) {
                     case "A":
@@ -76,18 +77,13 @@ async function main() {
         );
         results.forEach((result) => {
             if (!result || !result.data) {
-                console.error(`Warning: null result received, see above for error messages`);
+                console.error("Warning: null result received, see above for error messages");
                 return;
             }
             if (result.data.success === true) {
-                console.log(
-                    `DNS Record update success at `,
-                    getDateTime(),
-                    `: `,
-                    JSON.stringify(result.data, undefined, 2)
-                );
+                console.log(`DNS Record update success at :`, getDateTime());
             } else {
-                console.error(`DNS Record update failed: `, JSON.stringify(result.data.errors, undefined, 2));
+                console.error("DNS Record update failed :\n", JSON.stringify(result.data.errors, undefined, 2));
             }
         });
     } catch (err) {
@@ -95,15 +91,17 @@ async function main() {
     }
 }
 
-//cập nhật ip mỗi 1'
+//run first time
+main();
+
+//update ip every 1'
 setInterval(async () => {
     NewIP = await publicIp.v4();
-    //kiểm tra xem IP có thay đổi ko
+    //check if ip changed
     if (IP !== NewIP) {
-        //nếu có thì xử lí IP trong này
+        //update ip
         main();
-        // console.log(IP + " " + getDateTime());
     } else {
-        //nếu ko thì ko làm j cả hoặc làm gì đó ở dưới
+        //do nothing
     }
 }, 60 * 1000);
