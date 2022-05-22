@@ -97,14 +97,24 @@ async function main() {
 })();
 main();
 
-//update ip every 1'
+var i = 0; // dots counter
+//update ip every 1s
 setInterval(async () => {
     NewIP = await publicIp.v4();
-    //check if ip changed
-    if (IP !== NewIP) {
-        //update ip
-        main();
+    if (!NewIP) {
+        process.stdout.clearLine();
+        process.stdout.cursorTo(0);
+        i = (i + 1) % 4;
+        var dots = new Array(i + 1).join(".");
+        process.stdout.write("Waiting" + dots);
     } else {
-        //do nothing
+        //check if ip changed
+        if (IP !== NewIP) {
+            //update ip
+            main();
+        } else {
+            //do nothing
+            process.stdout.write(getDateTime() + "\r");
+        }
     }
-}, 60 * 1000);
+}, 1 * 1000);
