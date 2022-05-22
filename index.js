@@ -92,6 +92,9 @@ async function main() {
 }
 
 //run first time
+(async () => {
+    NewIP = await publicIp.v4();
+})();
 main();
 
 //update ip every 1'
