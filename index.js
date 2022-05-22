@@ -1,6 +1,14 @@
 import publicIp from "public-ip";
 import axios from "axios";
+import dns from "dns";
 import config from "./config.json" assert { type: "json" };
+
+let IP = null;
+let NewIP = null;
+let sec = 1000;
+let secofmin = 60;
+let minofhour = 60;
+let timetoUpdate = 5; //time to update IP
 
 //get date-time
 const getDateTime = () => {
@@ -11,10 +19,7 @@ const getDateTime = () => {
     return DateTime;
 };
 
-let IP = null;
-let NewIP = null;
-
-async function main() {
+async function changeIP() {
     try {
         // Load Config
         if (!config.hostname) {
@@ -48,8 +53,6 @@ async function main() {
         const results = await Promise.all(
             cfDnsIdRes.data.result.map(async (cfDnsRecord) => {
                 IP = cfDnsRecord.content;
-                console.log("\nCurrent IP :" + IP);
-                console.log("New IP     :" + NewIP);
                 let content;
                 switch (cfDnsRecord.type) {
                     case "A":
@@ -81,7 +84,8 @@ async function main() {
                 return;
             }
             if (result.data.success === true) {
-                console.log("\nDNS Record update success at: " + getDateTime());
+                console.log("DNS Record update success at: " + getDateTime());
+                console.log("IP has been updated: " + IP + " => " + NewIP);
             } else {
                 console.error("\nDNS Record update failed:\n", JSON.stringify(result.data.errors, undefined, 2));
             }
@@ -91,22 +95,41 @@ async function main() {
     }
 }
 
+const main = () => {
+    //check connection
+    dns.resolve("www.google.com", function (err) {
+        if (err) {
+            console.log(
+                "No connection please check your internet connection and this auto try again after " +
+                    timetoUpdate +
+                    " minute"
+            );
+        } else {
+            (async () => {
+                try {
+                    NewIP = await Promise.resolve(publicIp.v4());
+                    //check get new ip success
+                    if (NewIP) {
+                        //check if ip changed
+                        if (IP !== NewIP) {
+                            //update ip
+                            changeIP();
+                        }
+                    }
+                } catch (err) {
+                    console.log(err);
+                }
+            })();
+        }
+    });
+};
+
 console.clear();
-(async () => {
-    NewIP = await Promise.resolve(publicIp.v4());
-})();
+
+//run first time
 main();
 
-var i = 0; // dots counter
-//update ip every 1 minute
+//update ip every time
 setInterval(async () => {
-    NewIP = await Promise.resolve(publicIp.v4());
-    //check get new ip success
-    if (NewIP) {
-        //check if ip changed
-        if (IP !== NewIP) {
-            //update ip
-            main();
-        }
-    }
-}, 60 * 1000);
+    main();
+}, timetoUpdate * sec);
