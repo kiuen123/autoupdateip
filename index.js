@@ -91,12 +91,6 @@ async function main() {
     }
 }
 
-//run first time
-(async () => {
-    NewIP = await publicIp.v4();
-})();
-main();
-
 var i = 0; // dots counter
 //update ip every 1s
 setInterval(async () => {
