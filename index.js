@@ -81,9 +81,9 @@ async function main() {
                 return;
             }
             if (result.data.success === true) {
-                console.log(`DNS Record update success at :`, getDateTime());
+                console.log("\nDNS Record update success at :" + getDateTime());
             } else {
-                console.error("DNS Record update failed :\n", JSON.stringify(result.data.errors, undefined, 2));
+                console.error("\nDNS Record update failed :\n", JSON.stringify(result.data.errors, undefined, 2));
             }
         });
     } catch (err) {
@@ -95,7 +95,9 @@ var i = 0; // dots counter
 //update ip every 1s
 setInterval(async () => {
     NewIP = await publicIp.v4();
+    //check get new ip success
     if (!NewIP) {
+        //if not success, print dots
         process.stdout.clearLine();
         process.stdout.cursorTo(0);
         i = (i + 1) % 4;
@@ -108,7 +110,9 @@ setInterval(async () => {
             main();
         } else {
             //do nothing
-            process.stdout.write(getDateTime() + "\r");
+            process.stdout.clearLine();
+            process.stdout.cursorTo(0);
+            process.stdout.write(getDateTime());
         }
     }
 }, 1 * 1000);
