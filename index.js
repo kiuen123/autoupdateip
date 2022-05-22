@@ -93,32 +93,20 @@ async function main() {
 
 console.clear();
 (async () => {
-    NewIP = await publicIp.v4();
+    NewIP = await Promise.resolve(publicIp.v4());
 })();
 main();
 
 var i = 0; // dots counter
-//update ip every 1s
+//update ip every 1 minute
 setInterval(async () => {
-    NewIP = await publicIp.v4();
+    NewIP = await Promise.resolve(publicIp.v4());
     //check get new ip success
-    if (!NewIP) {
-        //if not success, print dots
-        process.stdout.clearLine();
-        process.stdout.cursorTo(0);
-        i = (i + 1) % 4;
-        var dots = new Array(i + 1).join(".");
-        process.stdout.write("Waiting" + dots);
-    } else {
+    if (NewIP) {
         //check if ip changed
         if (IP !== NewIP) {
             //update ip
             main();
-        } else {
-            //do nothing
-            process.stdout.clearLine();
-            process.stdout.cursorTo(0);
-            process.stdout.write(getDateTime());
         }
     }
-}, 5 * 1000);
+}, 60 * 1000);
