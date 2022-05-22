@@ -85,7 +85,7 @@ async function changeIP() {
             }
             if (result.data.success === true) {
                 console.log("DNS Record update success at: " + getDateTime());
-                console.log("IP has been updated: " + IP + " => " + NewIP);
+                console.log("IP has been updated: " + IP + " ==> " + NewIP);
             } else {
                 console.error("\nDNS Record update failed:\n", JSON.stringify(result.data.errors, undefined, 2));
             }
@@ -132,4 +132,4 @@ main();
 //update ip every time
 setInterval(async () => {
     main();
-}, timetoUpdate * sec);
+}, timetoUpdate * secofmin * sec);
