@@ -7,8 +7,7 @@ let IP = null;
 let NewIP = null;
 let sec = 1000;
 let secofmin = 60;
-let minofhour = 60;
-let timetoUpdate = 5; //time to update IP
+let timetoUpdate = 1; //time to update IP (min)
 
 //get date-time
 const getDateTime = () => {
@@ -133,3 +132,5 @@ main();
 setInterval(async () => {
     main();
 }, timetoUpdate * secofmin * sec);
+
+exports.main = main;
