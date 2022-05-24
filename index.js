@@ -132,5 +132,3 @@ main();
 setInterval(async () => {
     main();
 }, timetoUpdate * secofmin * sec);
-
-exports.main = main;
