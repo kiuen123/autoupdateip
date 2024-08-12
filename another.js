@@ -41,8 +41,8 @@ const updateDNSRecord = async (newIP) => {
 
 		// Fetch DNS record ID
 		const dnsRecordUrl = `https://api.cloudflare.com/client/v4/zones/${encodeURI(config.ZoneID)}/dns_records?name=${encodeURI(config.hostname)}`;
-		const { data: dnsData } = await axios.get(dnsRecordUrl, { headers: cfAuthHeaders });
-
+        const { data: dnsData } = await axios.get(dnsRecordUrl, { headers: cfAuthHeaders });
+        currentIP = dnsData.result[0].content;
 		if (!dnsData.result.length) throw new Error('DNS record not found.');
 
 		// Update each DNS record
@@ -89,6 +89,7 @@ const main = async () => {
 };
 
 // Initial run
+console.clear();
 main();
 
 // Schedule to run periodically
