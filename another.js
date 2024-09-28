@@ -2,7 +2,7 @@ import axios from 'axios';
 import dns from 'dns';
 import config from './config.json' assert { type: 'json' };
 
-let updateIntervalMinutes = 1
+let updateIntervalMinutes = 1;
 let currentIP = null;
 const updateIntervalMs = 60 * 1000 * updateIntervalMinutes || 60000; // Default to 1 minute
 
@@ -41,8 +41,8 @@ const updateDNSRecord = async (newIP) => {
 
 		// Fetch DNS record ID
 		const dnsRecordUrl = `https://api.cloudflare.com/client/v4/zones/${encodeURI(config.ZoneID)}/dns_records?name=${encodeURI(config.hostname)}`;
-        const { data: dnsData } = await axios.get(dnsRecordUrl, { headers: cfAuthHeaders });
-        currentIP = dnsData.result[0].content;
+		const { data: dnsData } = await axios.get(dnsRecordUrl, { headers: cfAuthHeaders });
+		currentIP = dnsData.result[0].content;
 		if (!dnsData.result.length) throw new Error('DNS record not found.');
 
 		// Update each DNS record
