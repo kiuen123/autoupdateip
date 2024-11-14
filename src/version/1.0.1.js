@@ -1,6 +1,6 @@
 import axios from 'axios';
 import dns from 'dns';
-import config from '../config.json' assert { type: 'json' };
+import config from '../../config.json' assert { type: 'json' };
 
 let IP = null;
 let NewIP = null;
