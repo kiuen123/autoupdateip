@@ -8,10 +8,10 @@
     "type": "module",
     "name": "autoupdateip",
     "version": "1.0.3",
-    "main": "v3.js",
+    "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "start": "nodemon v3.js"
+        "start": "npm install && nodemon index.js"
     },
     "author": "KienNT",
     "license": "ISC",

@@ -1,46 +1,48 @@
+import jsonfile from 'jsonfile';
 import axios from 'axios';
 import dns from 'dns';
-import config from './config.json' assert { type: 'json' };
 
-let updateIntervalMinutes = 1;
-let currentIP = null;
-const updateIntervalMs = 60 * 1000 * updateIntervalMinutes || 60000; // Default to 1 minute
-
-// Get the current date-time as a formatted string
-const getDateTime = () => {
-	const now = new Date();
-	return now.toLocaleString();
-};
+// Read the configuration file
+var configData = {};
+jsonfile.readFile('./config.json', (err, config) => {
+	if (err) console.error(err);
+	else {
+		configData = config;
+	}
+});
 
 // Fetch the public IP address
+let currentIP = null;
+let newIP = null;
 const getNewIPAddress = async () => {
 	try {
 		const { data } = await axios.get('https://api.ipify.org/?format=json');
-		return data.ip;
+		newIP = data.ip;
+		// return data.ip;
 	} catch (error) {
 		console.error('Error fetching IP:', error);
-		return null;
+		// return null;
 	}
 };
 
 // Update the DNS record on Cloudflare
-const updateDNSRecord = async (newIP) => {
+const updateDNSRecord = async () => {
 	try {
 		// Load authentication headers
 		let cfAuthHeaders = {};
-		if (config.UserAPIToken) {
-			cfAuthHeaders = { Authorization: `Bearer ${config.UserAPIToken}` };
-		} else if (config.email && config.token) {
+		if (configData.UserAPIToken) {
+			cfAuthHeaders = { Authorization: `Bearer ${configData.UserAPIToken}` };
+		} else if (configData.email && configData.token) {
 			cfAuthHeaders = {
-				'X-Auth-Email': config.email,
-				'X-Auth-Key': config.token,
+				'X-Auth-Email': configData.email,
+				'X-Auth-Key': configData.token,
 			};
 		} else {
 			throw new Error('Missing authentication credentials (Bearer Token or Email + Key).');
 		}
 
 		// Fetch DNS record ID
-		const dnsRecordUrl = `https://api.cloudflare.com/client/v4/zones/${encodeURI(config.ZoneID)}/dns_records?name=${encodeURI(config.hostname)}`;
+		const dnsRecordUrl = `https://api.cloudflare.com/client/v4/zones/${encodeURI(configData.ZoneID)}/dns_records?name=${encodeURI(configData.hostname)}`;
 		const { data: dnsData } = await axios.get(dnsRecordUrl, { headers: cfAuthHeaders });
 		currentIP = dnsData.result[0].content;
 		if (!dnsData.result.length) throw new Error('DNS record not found.');
@@ -52,17 +54,16 @@ const updateDNSRecord = async (newIP) => {
 				continue;
 			}
 
-			const updateUrl = `https://api.cloudflare.com/client/v4/zones/${encodeURI(config.ZoneID)}/dns_records/${encodeURI(record.id)}`;
+			const updateUrl = `https://api.cloudflare.com/client/v4/zones/${encodeURI(configData.ZoneID)}/dns_records/${encodeURI(record.id)}`;
 			const updateData = {
 				type: record.type,
 				name: record.name,
 				content: newIP,
 				proxied: true,
 			};
-
 			const updateResult = await axios.put(updateUrl, updateData, { headers: cfAuthHeaders });
 			if (updateResult.data.success) {
-				console.log(`[${getDateTime()}] DNS Record updated: ${currentIP} -> ${newIP}`);
+				console.log(`[${new Date().toLocaleString()}] DNS Record updated: ${currentIP} -> ${newIP}`);
 			} else {
 				console.error(`Failed to update DNS record: ${JSON.stringify(updateResult.data.errors, null, 2)}`);
 			}
@@ -74,13 +75,15 @@ const updateDNSRecord = async (newIP) => {
 	}
 };
 
+let updateIntervalMinutes = 1;
+const updateIntervalMs = 60 * 1000 * updateIntervalMinutes || 60000; // Default to 1 minute
 // Main function to check the connection and update IP if necessary
 const main = async () => {
 	try {
 		await dns.promises.resolve('www.google.com'); // Check internet connection
-		const newIP = await getNewIPAddress();
+		await getNewIPAddress();
 		if (newIP && newIP !== currentIP) {
-			await updateDNSRecord(newIP);
+			await updateDNSRecord();
 		}
 	} catch (error) {
 		console.error(`Error in main loop: ${error.message}`);
