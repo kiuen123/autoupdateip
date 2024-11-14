@@ -1,18 +1,19 @@
 {
     "dependencies": {
-        "axios": "^1.7.3",
+        "axios": "^1.7.7",
         "dns": "^0.2.2",
-        "nodemon": "^3.1.4"
+        "jsonfile": "^6.1.0",
+        "nodemon": "^3.1.7"
     },
     "type": "module",
     "name": "autoupdateip",
-    "version": "1.0.0",
+    "version": "1.0.3",
     "main": "v2.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "start": "nodemon another.js"
     },
-    "author": "",
+    "author": "KienNT",
     "license": "ISC",
-    "description": ""
+    "description": "auto update ip address"
 }
