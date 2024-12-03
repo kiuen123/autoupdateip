@@ -4,7 +4,7 @@ import dns from 'dns';
 
 // Read the configuration file
 var configData = {};
-jsonfile.readFile('./config.json', (err, config) => {
+jsonfile.readFile('./asset/config/config.json', (err, config) => {
 	if (err) console.error(err);
 	else {
 		configData = config;
