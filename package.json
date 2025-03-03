@@ -1,17 +1,17 @@
 {
     "dependencies": {
-        "axios": "^1.7.7",
-        "dns": "^0.2.2",
+        "axios": "^1.8.1",
+        "dns2": "^2.1.0",
         "jsonfile": "^6.1.0",
-        "nodemon": "^3.1.7"
+        "nodemon": "^3.1.9",
+        "ws": "^8.18.1"
     },
     "type": "module",
-    "name": "autoupdateip",
-    "version": "1.0.4",
+    "name": "auto_update_ip",
+    "version": "1.0.5",
     "main": "index.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "start": "npm install && nodemon index.js"
+        "start": "npm update --save && npm install && nodemon index.js"
     },
     "author": "KienNT",
     "license": "ISC",
