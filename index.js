@@ -4,12 +4,6 @@ import dns from 'dns';
 
 // Read the configuration file
 var configData = {};
-jsonfile.readFile('./asset/config/config.json', (err, config) => {
-	if (err) console.error(err);
-	else {
-		configData = config;
-	}
-});
 
 // Fetch the public IP address
 let currentIP = null;
@@ -83,6 +77,14 @@ const updateDNSRecord = async () => {
 
 let updateIntervalMinutes = 1;
 const updateIntervalMs = 60 * 1000 * updateIntervalMinutes || 60000; // Default to 1 minute
+// Read the configuration file
+await jsonfile.readFile('./asset/config/config.json', async (err, config) => {
+	if (err) console.error(err);
+	else {
+		configData = config;
+		console.log('Configuration loaded:', configData);
+	}
+});
 // Main function to check the connection and update IP if necessary
 const main = async () => {
 	try {
