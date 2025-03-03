@@ -129,7 +129,7 @@ const main = async () => {
 main();
 
 // Tạo WebSocket Server để gửi IP mới
-const wsPort = 85;
+const wsPort = 1500;
 const wss = new WebSocketServer({ port: wsPort });
 wss.on('connection', (ws) => {
 	const sendThisIP = async () => {
