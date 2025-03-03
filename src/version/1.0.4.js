@@ -104,7 +104,7 @@ const main = async () => {
 };
 
 // Initial run
-console.clear();
+// console.clear();
 main();
 
 // Schedule to run periodically
