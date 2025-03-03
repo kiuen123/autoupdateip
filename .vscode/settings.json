@@ -4,5 +4,19 @@
 	"[javascript]": {
 		"editor.defaultFormatter": "esbenp.prettier-vscode"
 	},
-	"cSpell.words": ["chương", "cộng", "dòng", "dựng", "Kiểm", "mạng", "mili", "thấy", "Thiếu", "trình", "viện", "vòng"]
+	"cSpell.words": [
+		"biến",
+		"chương",
+		"cộng",
+		"dòng",
+		"dựng",
+		"Kiểm",
+		"mạng",
+		"mili",
+		"thấy",
+		"Thiếu",
+		"trình",
+		"viện",
+		"vòng"
+	]
 }

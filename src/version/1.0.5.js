@@ -4,8 +4,16 @@ import axios from 'axios';
 import dns from 'dns';
 import { WebSocketServer } from 'ws';
 
+// các biến cần thiết
+var configData = {}; // config data
+let currentIP = null; // current IP
+let newIP = null; // new IP
+let updateIntervalMinutes = 1; // thời gian update IP (phút)
+const updateIntervalMs = 60 * 1000 * updateIntervalMinutes; // đổi phút sang mili giây
+const wsPort = 1500; // cổng WebSocket Server
+const wss = new WebSocketServer({ port: wsPort }); // tạo WebSocket Server
+
 // lấy config từ file config.json
-var configData = {};
 const getConfig = async () => {
 	try {
 		// Read the configuration file
@@ -36,8 +44,6 @@ const checkConnection = async () => {
 };
 
 // lấy IP mới
-let currentIP = null;
-let newIP = null;
 const getNewIPAddress = async () => {
 	try {
 		const { data } = await axios.get('https://api.ipify.org/?format=json');
@@ -104,8 +110,6 @@ const updateDNSRecord = async () => {
 };
 
 // Hàm chính để chạy chương trình
-let updateIntervalMinutes = 1; // thời gian cập nhật IP mặc định 1 phút
-const updateIntervalMs = 60 * 1000 * updateIntervalMinutes; // chuyển đổi phút sang mili giây
 const main = async () => {
 	do {
 		console.log(`WebSocket Server đang chạy tại ws://localhost:${wsPort}`);
@@ -129,8 +133,6 @@ const main = async () => {
 main();
 
 // Tạo WebSocket Server để gửi IP mới
-const wsPort = 1500;
-const wss = new WebSocketServer({ port: wsPort });
 wss.on('connection', (ws) => {
 	const sendThisIP = async () => {
 		try {
