@@ -112,9 +112,9 @@ const updateDNSRecord = async () => {
 // Hàm chính để chạy chương trình
 const main = async () => {
 	do {
-		console.log(`WebSocket Server đang chạy tại ws://localhost:${wsPort}`);
 		console.clear();
 		await getConfig();
+		console.log(`WebSocket Server dang chạy tại ws://localhost:${wsPort}`);
 		await checkConnection()
 			.then(async () => {
 				console.log('Đã kết nối mạng');
