@@ -77,17 +77,20 @@ const updateDNSRecord = async () => {
 
 let updateIntervalMinutes = 1;
 const updateIntervalMs = 60 * 1000 * updateIntervalMinutes || 60000; // Default to 1 minute
-// Read the configuration file
-await jsonfile.readFile('./asset/config/config.json', async (err, config) => {
-	if (err) console.error(err);
-	else {
-		configData = config;
-		console.log('Configuration loaded:', configData);
-	}
-});
+
 // Main function to check the connection and update IP if necessary
 const main = async () => {
 	try {
+		console.clear();
+		// Read the configuration file
+		await jsonfile.readFile('./asset/config/config.json', async (err, config) => {
+			if (err) console.error(err);
+			else {
+				configData = config;
+				console.log('HostName:', configData.hostname);
+				console.log('Email   :', configData.email);
+			}
+		});
 		// check connection
 		dns.resolve('www.google.com', async (err) => {
 			if (err) {
@@ -106,7 +109,6 @@ const main = async () => {
 };
 
 // Initial run
-console.clear();
 main();
 
 // Schedule to run periodically
