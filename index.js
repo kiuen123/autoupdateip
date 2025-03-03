@@ -3,6 +3,7 @@ import jsonfile from 'jsonfile';
 import axios from 'axios';
 import dns from 'dns';
 import { WebSocketServer } from 'ws';
+import { time } from 'console';
 
 // các biến cần thiết
 var configData = {}; // config data
@@ -138,7 +139,6 @@ wss.on('connection', (ws) => {
 		try {
 			const data = {
 				currentIP: currentIP,
-				newIP: newIP,
 			};
 			ws.send(JSON.stringify(data));
 		} catch (error) {}
