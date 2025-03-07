@@ -3,7 +3,6 @@ import jsonfile from 'jsonfile';
 import axios from 'axios';
 import dns from 'dns';
 import { WebSocketServer } from 'ws';
-import { time } from 'console';
 
 // các biến cần thiết
 var configData = {}; // config data
@@ -14,7 +13,7 @@ const updateIntervalMs = 60 * 1000 * updateIntervalMinutes; // đổi phút sang
 const wsPort = 1500; // cổng WebSocket Server
 const wss = new WebSocketServer({ port: wsPort }); // tạo WebSocket Server
 
-// lấy config từ file config.json
+// lấy config từ file asset/config/config.json
 const getConfig = async () => {
 	try {
 		// Read the configuration file
