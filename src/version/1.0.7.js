@@ -1,8 +1,8 @@
 import { WebSocketServer } from 'ws';
-import { checkConnection } from './src/component/CheckConnection.js';
-import { getNewIPAddress } from './src/component/GetNewIPAddress.js';
-import { getConfig } from './src/component/GetConfig.js';
-import { updateDNSRecord } from './src/component/UpdateDNSRecord.js';
+import { checkConnection } from '../../src/component/CheckConnection.js';
+import { getNewIPAddress } from '../../src/component/GetNewIPAddress.js';
+import { getConfig } from '../../src/component/GetConfig.js';
+import { updateDNSRecord } from '../../src/component/UpdateDNSRecord.js';
 
 let configData = null; // config data
 let newIP = null; // new IP
