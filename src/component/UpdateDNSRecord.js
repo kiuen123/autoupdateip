@@ -26,7 +26,7 @@ export const updateDNSRecord = async (configData, newIP) => {
 
 			if (dnsData.result[0].content == newIP) {
 				console.log(`[${new Date().toLocaleString()}] ${item}: ${dnsData.result[0].content}`);
-				return;
+				continue;
 			}
 
 			// update the DNS record
