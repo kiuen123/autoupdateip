@@ -41,7 +41,7 @@ export const updateDNSRecord = async (configData, newIP) => {
 					type: record.type,
 					name: record.name,
 					content: newIP,
-					proxied: true,
+					proxied: record.proxied,
 				};
 				const updateResult = await axios.put(updateUrl, updateData, { headers: cfAuthHeaders });
 
