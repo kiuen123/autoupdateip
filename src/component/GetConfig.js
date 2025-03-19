@@ -6,8 +6,6 @@ export const getConfig = async () => {
 			if (err) {
 				reject(new Error('Error getting config:', err));
 			} else {
-				console.log('HostName:', config.hostname);
-				console.log('Email   :', config.email);
 				resolve({ config: config });
 			}
 		});

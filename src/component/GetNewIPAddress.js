@@ -7,6 +7,8 @@ export const getNewIPAddress = async () => {
 			.then(({ data }) => {
 				resolve(data.ip);
 			})
-			.catch((error) => reject(new Error(`Error getting new IP address:`, error)));
+			.catch((error) => {
+				reject(new Error(`Error getting new IP address:`, error));
+			});
 	});
 };
