@@ -1,4 +1,3 @@
 cd ~
-cd /Desktop/autoupdateip/
-sudo apt update -y && sudo apt upgrade -y
+cd Desktop/autoupdateip
 npm start
