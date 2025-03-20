@@ -6,7 +6,7 @@ import { updateDNSRecord } from './src/component/UpdateDNSRecord.js';
 
 let configData = null; // config data
 let newIP = null; // new IP
-let updateIntervalMinutes = 1; // thời gian update IP (phút)
+let updateIntervalMinutes = 5; // thời gian update IP (phút)
 const updateIntervalMs = 60 * 1000 * updateIntervalMinutes; // đổi phút sang mili giây
 const wsPort = 1500; // cổng WebSocket Server
 const wss = new WebSocketServer({ port: wsPort }); // tạo WebSocket Server
@@ -18,36 +18,34 @@ const main = async () => {
 			console.log(`WebSocket Server is running on ws://localhost:${wsPort}`);
 			// get configuration
 			await getConfig()
-				.then((config) => {
+				.then(async (config) => {
 					configData = config.config;
+					// check connection
+					await checkConnection()
+						.then(async () => {
+							// get new IP address
+							await getNewIPAddress()
+								.then(async (ip) => {
+									newIP = ip;
+									// update DNS record
+									await updateDNSRecord(configData, newIP);
+								})
+								.catch((error) => {
+									throw new Error(error);
+								});
+						})
+						.catch((error) => {
+							console.log(`Retrying in ${updateIntervalMinutes} minutes ...`);
+							throw new Error(error);
+						});
 				})
 				.catch((error) => {
 					throw new Error(error);
 				});
-
-			// get new IP address
-			await getNewIPAddress()
-				.then((ip) => {
-					newIP = ip;
-				})
-				.catch((error) => {
-					throw new Error(error);
-				});
-
-			// check connection
-			await checkConnection()
-				.then(async () => {
-					await updateDNSRecord(configData, newIP);
-				})
-				.catch((error) => {
-					console.log(`Retrying in ${updateIntervalMinutes} minutes ...`);
-					throw new Error(error);
-				});
-
-			// wait for the next update
 		} catch (error) {
 			console.error(error);
 		}
+		// wait for the next update
 		await new Promise((resolve) => setTimeout(resolve, updateIntervalMs));
 	} while (true);
 };

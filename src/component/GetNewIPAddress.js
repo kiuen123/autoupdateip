@@ -5,10 +5,11 @@ export const getNewIPAddress = async () => {
 		axios
 			.get('https://api.ipify.org/?format=json')
 			.then(({ data }) => {
+				console.log(`IP address: ${data.ip}`);
 				resolve(data.ip);
 			})
 			.catch((error) => {
-				reject(new Error(`Error getting new IP address:`, error));
+				reject(new Error(`Error getting new IP address: ${error}`));
 			});
 	});
 };

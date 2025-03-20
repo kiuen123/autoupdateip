@@ -6,6 +6,7 @@ export const getConfig = async () => {
 			if (err) {
 				reject(new Error('Error getting config:', err));
 			} else {
+				console.log('Config loaded successfully.');
 				resolve({ config: config });
 			}
 		});
