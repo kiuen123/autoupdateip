@@ -2,17 +2,20 @@
 	"editor.defaultFormatter": "esbenp.prettier-vscode",
 	"editor.formatOnSave": true,
 	"[javascript]": {
-		"editor.defaultFormatter": "esbenp.prettier-vscode"
+		"editor.defaultFormatter": "vscode.typescript-language-features"
 	},
 	"cSpell.words": [
 		"biến",
 		"chương",
+		"cổng",
 		"cộng",
 		"dòng",
 		"dựng",
+		"giây",
 		"Kiểm",
 		"mạng",
 		"mili",
+		"phút",
 		"thấy",
 		"Thiếu",
 		"trình",

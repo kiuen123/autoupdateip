@@ -23,7 +23,7 @@ export const updateDNSRecord = async (configData, newIP) => {
 				console.error(`DNS record not found for ${item}`);
 				continue;
 			}
-
+			// check if the DNS record already points to the new IP
 			if (dnsData.result[0].content == newIP) {
 				console.log(`[${new Date().toLocaleString()}] ${item}: ${dnsData.result[0].content}`);
 				continue;
@@ -46,7 +46,7 @@ export const updateDNSRecord = async (configData, newIP) => {
 				const updateResult = await axios.put(updateUrl, updateData, { headers: cfAuthHeaders });
 
 				if (updateResult.data.success) {
-					console.log(`[${new Date().toLocaleString()}] ${item}: ${newIP}`);
+					console.log(`[${new Date().toLocaleString()}] ${item}: ${dnsData.result[0].content} -> ${newIP}`);
 				} else {
 					console.error(`Failed to update ${record.name}:`, JSON.stringify(updateResult.data.errors, null, 2));
 				}

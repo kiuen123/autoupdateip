@@ -1,10 +1,7 @@
 {
-    "hostname": [
-        "...",
-        "..."
-    ],
-    "UserAPIToken": "...",
-    "ZoneID": "...",
-    "email": "...",
-    "token": "..."
+  "hostname": ["...", "..."],
+  "UserAPIToken": "...",
+  "ZoneID": "...",
+  "email": "...",
+  "token": "..."
 }

@@ -1,8 +1,8 @@
-import { WebSocketServer } from 'ws';
-import { checkConnection } from './src/component/CheckConnection.js';
-import { getNewIPAddress } from './src/component/GetNewIPAddress.js';
-import { getConfig } from './src/component/GetConfig.js';
-import { updateDNSRecord } from './src/component/UpdateDNSRecord.js';
+import { WebSocketServer } from "ws";
+import { checkConnection } from "./components/CheckConnection.js";
+import { getNewIPAddress } from "./components/GetNewIPAddress.js";
+import { getConfig } from "./components/GetConfig.js";
+import { updateDNSRecord } from "./components/UpdateDNSRecord.js";
 
 let configData = null; // config data
 let newIP = null; // new IP
@@ -12,10 +12,10 @@ const wsPort = 1500; // cổng WebSocket Server
 const wss = new WebSocketServer({ port: wsPort }); // tạo WebSocket Server
 
 const main = async () => {
+	console.log(`WebSocket Server is running on ws://localhost:${wsPort}`);
 	do {
 		try {
-			console.clear();
-			console.log(`WebSocket Server is running on ws://localhost:${wsPort}`);
+			console.log("--------------------------------------------------------------------");
 			// get configuration
 			await getConfig()
 				.then(async (config) => {
@@ -42,8 +42,12 @@ const main = async () => {
 				.catch((error) => {
 					throw new Error(error);
 				});
+
+			console.log("--------------------------------------------------------------------");
 		} catch (error) {
+			console.log("--------------------------------------------------------------------");
 			console.error(error);
+			console.log("--------------------------------------------------------------------");
 		}
 		// wait for the next update
 		await new Promise((resolve) => setTimeout(resolve, updateIntervalMs));
@@ -53,19 +57,19 @@ const main = async () => {
 main();
 
 // Create WebSocket Server and send ip address to client
-wss.on('connection', (ws) => {
+wss.on("connection", (ws) => {
 	const sendThisIP = async () => {
 		try {
 			const data = {
 				IP: newIP,
 			};
 			ws.send(JSON.stringify(data));
-		} catch (error) {}
+		} catch (error) { }
 	};
 
 	const interval = setInterval(sendThisIP, updateIntervalMs); // gửi IP mỗi phút
 
-	ws.on('close', () => {
+	ws.on("close", () => {
 		clearInterval(interval);
 	});
 });
