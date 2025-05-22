@@ -12,10 +12,11 @@ const wsPort = 1500; // cổng WebSocket Server
 const wss = new WebSocketServer({ port: wsPort }); // tạo WebSocket Server
 
 const main = async () => {
-	console.log(`WebSocket Server is running on ws://localhost:${wsPort}`);
 	do {
 		try {
+			console.clear();
 			console.log('-'.repeat(process.stdout.columns));
+			console.log(`WebSocket Server is running on ws://localhost:${wsPort}`);
 			// get configuration
 			await getConfig()
 				.then(async (config) => {
