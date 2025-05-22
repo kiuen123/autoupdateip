@@ -15,7 +15,7 @@ const main = async () => {
 	console.log(`WebSocket Server is running on ws://localhost:${wsPort}`);
 	do {
 		try {
-			console.log("--------------------------------------------------------------------");
+			console.log('-'.repeat(process.stdout.columns));
 			// get configuration
 			await getConfig()
 				.then(async (config) => {
@@ -42,12 +42,11 @@ const main = async () => {
 				.catch((error) => {
 					throw new Error(error);
 				});
-
-			console.log("--------------------------------------------------------------------");
+			console.log('-'.repeat(process.stdout.columns));
 		} catch (error) {
-			console.log("--------------------------------------------------------------------");
+			console.log('-'.repeat(process.stdout.columns));
 			console.error(error);
-			console.log("--------------------------------------------------------------------");
+			console.log('-'.repeat(process.stdout.columns));
 		}
 		// wait for the next update
 		await new Promise((resolve) => setTimeout(resolve, updateIntervalMs));
