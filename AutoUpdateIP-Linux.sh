@@ -1,6 +1,5 @@
 cd ~
 
-
 cd Desktop/autoupdateip
 
 git pull origin master
