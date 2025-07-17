@@ -1,8 +1,9 @@
 cd ~
 
-git pull origin master
 
 cd Desktop/autoupdateip
+
+git pull origin master
 
 if [ ! -f "assets/config.json" ]; then
   npm start
