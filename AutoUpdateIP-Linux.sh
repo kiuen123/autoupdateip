@@ -4,7 +4,7 @@ git pull origin master
 
 cd Desktop/autoupdateip
 
-if [ -f "assets/config.json" ]; then
+if [ ! -f "assets/config.json" ]; then
   npm start
 else
   cp assets/config-template.json assets/config.json
